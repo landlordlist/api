@@ -35,7 +35,8 @@ def list():
             'party': {
                 "name": person.party.name,
                 "colour": person.party.colour,
-                "abbr": person.party.abbreviation
+                "abbr": person.party.abbreviation,
+                "text_colour": person.party.text_color
             },
             'is_landlord': person.is_landlord,
             'avatar_url': person.avatar_url,
