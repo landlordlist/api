@@ -39,7 +39,7 @@ def single(house_name):
 
     party_balance  = db.session.execute(
         """
-        SELECT parties.id, parties.name, COUNT(people.id), SUM(people.is_landlord) as member_count FROM people
+        SELECT parties.id, parties.name, COUNT(people.id), SUM(people.is_landlord), parties.abbreviation, parties.colour as member_count FROM people
           JOIN parties ON party_id = parties.id
         WHERE body = '%s'
         GROUP BY party_id
@@ -53,7 +53,9 @@ def single(house_name):
             '_id': p[0],
             'name': p[1],
             'members': p[2],
-            'landlords': p[3]
+            'landlords': p[3],
+            'abbr': p[4],
+            'colour': p[5]
         })
 
     return jsonify({
