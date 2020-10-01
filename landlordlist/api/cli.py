@@ -38,8 +38,6 @@ def get_parties():
     parties = ET.fromstring(xml_raw)
 
     for party in parties:
-        if party.find('IsCommons').text == 'False' and party.find('IsLords').text == 'False':
-            continue
 
         new_party = Party(
             name=party.find('Name').text,
@@ -87,7 +85,7 @@ def get_commons():
 
         person = Person.query.get(id)
         if person is None:
-            person = Person(id)
+            person = Person(pk=id)
             new = True
 
         person.name = m.find('DisplayAs').text
@@ -134,7 +132,7 @@ def get_lords():
 
         person = Person.query.get(id)
         if person is None:
-            person = Person(id)
+            person = Person(pk=id)
             new = True
 
         person.name = m.find('DisplayAs').text
