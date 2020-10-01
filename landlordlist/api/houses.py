@@ -35,14 +35,14 @@ def single(house_name):
         return abort(404)
 
     member_count   = db.session.execute("SELECT COUNT(*) FROM people WHERE body = '%s'" % house_name, ).first()
-    landlord_count = db.session.execute("SELECT COUNT(*) FROM people WHERE body = '%s' and is_landlord = 1" % house_name, ).first()
+    landlord_count = db.session.execute("SELECT COUNT(*) FROM people WHERE body = '%s' and is_landlord = TRUE" % house_name, ).first()
 
     party_balance  = db.session.execute(
         """
-        SELECT parties.id, parties.name, COUNT(people.id), SUM(people.is_landlord), parties.abbreviation, parties.colour as member_count FROM people
+        SELECT parties.id, parties.name, COUNT(people.id) as member_count, SUM(people.is_landlord::int), parties.abbreviation, parties.colour FROM people
           JOIN parties ON party_id = parties.id
         WHERE body = '%s'
-        GROUP BY party_id
+        GROUP BY parties.id
         ORDER BY member_count DESC
         """ % house_name,
     ).fetchall()

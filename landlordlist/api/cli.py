@@ -57,6 +57,7 @@ def get_parties():
         except exc.IntegrityError:
             db.session.rollback()
 
+
     print('Done.')
 
 
@@ -81,7 +82,13 @@ def get_commons():
     for m in members:
         i += 1
 
-        person = Person(int(m.get('Member_Id')))
+        id = int(m.get('Member_Id'))
+        new = False
+
+        person = Person.query.get(id)
+        if person is None:
+            person = Person(id)
+            new = True
 
         person.name = m.find('DisplayAs').text
         person.list_as = m.find('ListAs').text
@@ -90,12 +97,15 @@ def get_commons():
         person.represents = m.find('MemberFrom').text
 
         try:
-            db.session.add(person)
+            if new:
+                db.session.add(person)
+
             db.session.commit()
             if i % 100 == 0:
                 print(i, person)
         except exc.IntegrityError:
             db.session.rollback()
+            print('Integrity Error:', id, person)
 
 
 @bp.cli.command('get:hol')
@@ -119,7 +129,13 @@ def get_lords():
     for m in members:
         y += 1
 
-        person = Person(int(m.get('Member_Id')))
+        id = int(m.get('Member_Id'))
+        new = False
+
+        person = Person.query.get(id)
+        if person is None:
+            person = Person(id)
+            new = True
 
         person.name = m.find('DisplayAs').text
         person.list_as = m.find('ListAs').text
@@ -140,12 +156,15 @@ def get_lords():
                 person.expl_txt = person.expl_txt + '. ' + text
 
         try:
-            db.session.add(person)
+            if new:
+                db.session.add(person)
+
             db.session.commit()
             if y % 100 == 0:
                 print(y, person)
         except exc.IntegrityError:
             db.session.rollback()
+            print('Integrity Error:', id, person)
 
 
 @bp.cli.command('get:override')
