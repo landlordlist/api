@@ -18,7 +18,14 @@ limiter = Limiter(key_func=get_remote_address)
 
 # Flask App
 def create_app():
-    app = Flask(__name__, instance_relative_config=True)
+    # Check for instance path environment variable
+    _instance_path = os.environ.get('INSTANCE_PATH', default=None)
+
+    app = Flask(
+        __name__,
+        instance_relative_config=True,
+        instance_path=_instance_path
+    )
 
     # load the instance config, if it exists, when not testing
     app.config.from_pyfile(os.path.join(app.instance_path, 'config.py'), silent=True)
