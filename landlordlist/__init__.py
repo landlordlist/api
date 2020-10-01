@@ -22,8 +22,8 @@ def create_app(test_config=None):
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
-        app.config.from_pyfile(os.path.join(app.instance_path, 'config.py'), silent=True)
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.instance_path, 'll.sqlite')
+        app.config.from_pyfile(os.path.join(app.instance_path, 'config.py'), silent=True)
     else:
         # load the test config if passed in
         app.config.from_mapping(test_config)
