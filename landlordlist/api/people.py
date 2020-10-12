@@ -23,7 +23,7 @@ def list():
         people = people.filter_by(is_landlord=True)
 
     if q.get('search'):
-        people = people.filter(Person.name.contains(q.get('search')))
+        people = people.filter(Person.name.contains(q.get('search').title()))
 
     # This offset should be the last condition
     if q.get('offset'):
