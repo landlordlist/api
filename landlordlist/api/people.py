@@ -22,6 +22,9 @@ def list():
     if q.get('landlord'):
         people = people.filter_by(is_landlord=True)
 
+    if q.get('search'):
+        people = people.filter(Person.name.contains(q.get('search')))
+
     # This offset should be the last condition
     if q.get('offset'):
         people = people.offset(int(q.get('offset')))
